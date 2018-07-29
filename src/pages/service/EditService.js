@@ -1,11 +1,8 @@
-import React, {Component} from 'react';
+import React,{Component} from 'react'
 
-import {Input, Table, Modal, Button} from 'antd';
-
+import { Table, Input, Modal, Button, Divider } from 'antd'
 const { Column } = Table;
 const { TextArea } = Input;
-
-import './service.css';
 
 
 const data = [{
@@ -20,7 +17,7 @@ const data = [{
     configContent: 'bbb',
 }];
 
-export default class AddService extends Component {
+export default class EditService extends Component {
 
     state = { visible: false };
 
@@ -40,14 +37,14 @@ export default class AddService extends Component {
         this.props.history.push('/Service/List');
     };
 
-    render(){
+    render() {
         return(
             <div>
                 <div className="header-menu">
                     <a href="javascript:;" onClick={this._goServiceList}>返回服务列表</a>
                 </div>
                 <div className="service-box">
-                    <h1 className="service-title">添加配置</h1>
+                    <h1 className="service-title">编辑配置文件列表页面</h1>
                     <div className="input-ui">
                         <label>Service</label>
                         <Input/>
@@ -59,9 +56,6 @@ export default class AddService extends Component {
                     <div className="input-ui">
                         <label>Comment</label>
                         <Input/>
-                    </div>
-                    <div className="submit-btn" style={{textAlign:'right'}}>
-                        <Button type="primary" onClick={this.showModal}>添加配置文件</Button>
                     </div>
                     <Modal
                         title="配置文件"
@@ -104,7 +98,9 @@ export default class AddService extends Component {
                             key="action"
                             render={(text, record) => (
                                 <span>
-                                    <a href="javascript:;" onClick={this._delService}>删除</a>
+                                    <a href="javascript:;" onClick={this.showModal}>编辑</a>
+                                    <Divider type="vertical"/>
+                                    <a href="javascript:;">删除</a>
                                 </span>
                             )}
                         />

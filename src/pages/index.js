@@ -1,7 +1,14 @@
-import ServiceList from './service/ServiceList'
-import AddService from './service/AddService'
+import {
+    ServiceList,
+    AddService,
+    EditService,
+    CheckService,
+} from './service'
+
 
 export {
     ServiceList,
     AddService,
+    EditService,
+    CheckService
 }

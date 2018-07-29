@@ -14,6 +14,8 @@ import Welcome from './Welcome';
 import {
     ServiceList,
     AddService,
+    EditService,
+    CheckService,
 } from './pages'
 
 
@@ -30,10 +32,13 @@ class App extends Component {
                         <Route path="/Service/:type" render={props => {
                             let type = props.match.params.type;
                             if (type === 'List') {
-                                return (<ServiceList {...props}/>)
-
+                                return <ServiceList {...props}/>
                             } else if (type === 'Add') {
-                                return (<AddService {...props}/>)
+                                return <AddService {...props}/>
+                            } else if (type === 'Edit') {
+                                return <EditService {...props}/>
+                            } else if (type === 'Check') {
+                                return <CheckService {...props}/>
                             }
                         }}/>
                     </Switch>
