@@ -4,12 +4,14 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 
 import createHistory from "history/createBrowserHistory";
 
+import {reducer as formReducer } from 'redux-form'
+
 import {
     routerReducer,
     routerMiddleware,
 } from "react-router-redux";
 
-//import reducers from "./reducers"; // Or wherever you keep your reducers
+import {serviceReducer} from "./pages/service/reducers"; // Or wherever you keep your reducers
 
 // Create a history of your choosing (we're using a browser history in this case)
 export const history = createHistory();
@@ -21,7 +23,9 @@ const middleware = routerMiddleware(history);
 // Also apply our middleware for navigating
 const store = createStore(
     combineReducers({
-        router: routerReducer
+        router: routerReducer,
+        service: serviceReducer,
+        form: formReducer
     }),
     applyMiddleware(middleware)
 );

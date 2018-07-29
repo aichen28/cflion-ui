@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 
 import { Table, Divider } from 'antd';
 
+import {connect} from 'react-redux'
+
 const { Column } = Table;
 
 import './service.css';
@@ -48,6 +50,8 @@ export default class ServiceList extends Component {
     };
 
     render (){
+        console.log(this.props.service);
+
         return (
             <div>
                 <h1 className="service-title">配置列表</h1>
@@ -100,7 +104,12 @@ export default class ServiceList extends Component {
     }
 }
 
-
+ServiceList = connect(
+    (state) => ({
+        service: state.service
+    }),
+    null
+)(ServiceList);
 
 
 
