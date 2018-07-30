@@ -31,7 +31,7 @@ const data = [{
     comment:'备注'
 }];
 
-export default class ServiceList extends Component {
+class ServiceList extends Component {
 
     _addService = () => {
         this.props.history.push('/Service/Add')
@@ -104,7 +104,7 @@ export default class ServiceList extends Component {
     }
 }
 
-ServiceList = connect(
+export default ServiceList = connect(
     (state) => ({
         service: state.service
     }),

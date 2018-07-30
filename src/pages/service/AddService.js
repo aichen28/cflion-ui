@@ -8,7 +8,10 @@ import {Field, reduxForm} from 'redux-form'
 
 import {Input, Table, Modal, Button} from 'antd';
 
-import InputField from '../../component/form/InputField'
+import {
+    InputField,
+    TextAreaField,
+} from '../../component/form/InputField'
 
 import './service.css';
 
@@ -28,85 +31,65 @@ const { TextArea } = Input;
     configContent: 'bbb',
 }];*/
 
-class AddForm extends React.Component {
 
-    state = { visible: false };
-
-    _showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    };
-
-    _cancelModal = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    _okModal = () => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    _addService = (values) => {
-        let service = {};
-        service.service = values.service;
-        service.environment = values.environment;
-        service.comment= values.comment;
-        this.props.onAddService(service)
-    };
-
-    render() {
-        let service = this.props.service;
-        let configs = service ? service.configs : [];
-        const {handleSubmit} = this.props;
+class ConfigsForm extends React.Component {
+    render () {
+        const {handleSubmit, okModal, cancelModal, visible} = this.props;
 
         return (
-            <div className="service-box">
-                <h1 className="service-title">添加配置</h1>
+            <Modal
+                title="配置文件"
+                visible={visible}
+                onOk={handleSubmit(okModal)}
+                onCancel={cancelModal}
+                okText="确认"
+                cancelText="取消"
+            >
                 <div className="input-ui">
-                    <label>Service</label>
+                    <label>Config Name</label>
                     <InputField
                         type={'text'}
-                        name={'service'}
-                        placeholder={'service'}
+                        name={'configName'}
+                        placeholder={'config name'}
                     />
                 </div>
                 <div className="input-ui">
-                    <label>Environment</label>
-                    <InputField
-                        type={'text'}
-                        name={'environment'}
-                        placeholder={'environment'}
+                    <label>Config Content</label>
+                    <TextAreaField
+                        name={'configContent'}
+                        placeholder={'config content'}
+                        autosize={{minRows: 6, maxRows: 10}}
                     />
                 </div>
-                <div className="input-ui">
-                    <label>Comment</label>
-                    <InputField
-                        type={'text'}
-                        name={'comment'}
-                        placeholder={'comment'}
-                    />
+            </Modal>
+        )
+    }
+}
+
+ConfigsForm = reduxForm({
+    form: 'configsForm'
+})(ConfigsForm);
+
+
+let dataKey = 0;
+let configFiles = 0;
+
+class AddConfigsModal extends React.Component {
+    render() {
+
+        let service = this.props.service;
+        let configs = service ? service.configs : [];
+
+        return (
+            <div>
+                <div className="submit-btn" style={{textAlign:'right'}}>
+                    <Button type="primary" onClick={this._showModal}>添加配置文件</Button>
                 </div>
-                <Modal
-                    title="配置文件"
+                <ModalForm
                     visible={this.state.visible}
-                    onOk={this._okModal}
-                    onCancel={this._cancelModal}
-                    okText="确认"
-                    cancelText="取消"
-                >
-                    <div className="input-ui">
-                        <label>Config Name</label>
-                        <Input/>
-                    </div>
-                    <div className="input-ui">
-                        <label>Config Content</label>
-                        <TextArea placeholder="config content" autosize={{ minRows: 2, maxRows: 10 }} />
-                    </div>
-                </Modal>
+                    okModal={this._okModal}
+                    cancelModal={this._cancelModal}
+                />
                 <Table
                     dataSource={configs}
                     pagination={false}
@@ -136,6 +119,78 @@ class AddForm extends React.Component {
                         )}
                     />
                 </Table>
+            </div>
+        )
+    }
+}
+
+class AddForm extends React.Component {
+
+    state = { visible: false };
+
+    _showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    };
+
+    _cancelModal = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    _okModal = (values) => {
+        console.log(values);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    _addService = (values) => {
+        let service = {};
+        service.key = dataKey;
+        service.xuHao = service;
+        service.service = values.service;
+        service.environment = values.environment;
+        service.comment= values.comment;
+        service.configFiles = 2;
+        dataKey++;
+        this.props.onAddService(service);
+        this.props.history.replace('/Service/List');
+    };
+
+    render() {
+        const {handleSubmit} = this.props;
+
+        return (
+            <div className="service-box">
+                <h1 className="service-title">添加配置</h1>
+                <div className="input-ui">
+                    <label>Service</label>
+                    <InputField
+                        type={'text'}
+                        name={'service'}
+                        placeholder={'service'}
+                    />
+                </div>
+                <div className="input-ui">
+                    <label>Environment</label>
+                    <InputField
+                        type={'text'}
+                        name={'environment'}
+                        placeholder={'environment'}
+                    />
+                </div>
+                <div className="input-ui">
+                    <label>Comment</label>
+                    <InputField
+                        type={'text'}
+                        name={'comment'}
+                        placeholder={'comment'}
+                    />
+                </div>
+                <AddConfigsModal {...this.props}/>
                 <div className="submit-btn">
                     <Button onClick={handleSubmit(this._addService)}>提交</Button>
                 </div>
@@ -170,7 +225,7 @@ export default class AddService extends React.Component {
                 <div className="header-menu">
                     <a href="javascript:;" onClick={this._goServiceList}>返回服务列表</a>
                 </div>
-                <AddForm/>
+                <AddForm {...this.props}/>
             </div>
         )
     }
