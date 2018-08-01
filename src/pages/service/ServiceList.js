@@ -8,7 +8,7 @@ const { Column } = Table;
 
 import './service.css';
 
-const data = [{
+/*const data = [{
     key: 0,
     xuHao: 0,
     service: 'zd_base_upload',
@@ -29,7 +29,7 @@ const data = [{
     environment: 'dev',
     configFiles: 1,
     comment:'备注'
-}];
+}];*/
 
 class ServiceList extends Component {
 
@@ -50,19 +50,25 @@ class ServiceList extends Component {
     };
 
     render (){
-        console.log(this.props.service);
+        let service = this.props.service, data = [];
+        if (service) {
+            for (let k = 0; k < service.length; k++) {
+                data.push(service[k].service);
+            }
+        }
+        console.log(data);
 
         return (
             <div>
                 <h1 className="service-title">配置列表</h1>
                 <Table
-                    dataSource={data}
+                    dataSource={data || []}
                     pagination={false}
                 >
                     <Column
                         title="#"
-                        dataIndex="xuHao"
-                        key="xuHao"
+                        dataIndex="id"
+                        key="id"
                     />
                     <Column
                         title="Service"

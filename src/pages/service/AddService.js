@@ -19,17 +19,34 @@ import './service.css';
 const { Column } = Table;
 const { TextArea } = Input;
 
-/*const data = [{
-    key: 1,
-    xuHao: 1,
-    configName: 'AAA',
-    configContent: 'aaa',
-}, {
-    key: 2,
-    xuHao: 2,
-    configName: 'BBB',
-    configContent: 'bbb',
-}];*/
+let dataKey = 0;
+let configFiles = 0;
+let configArray = [];
+
+let removeObjWithArr = function (_arr,_obj) {
+    var length = _arr.length;
+    for(var i = 0; i < length; i++)
+    {
+        if(_arr[i] == _obj)
+        {
+            if(i == 0)
+            {
+                _arr.shift(); //删除并返回数组的第一个元素
+                return;
+            }
+            else if(i == length-1)
+            {
+                _arr.pop();  //删除并返回数组的最后一个元素
+                return;
+            }
+            else
+            {
+                _arr.splice(i,1); //删除下标为i的元素
+                return;
+            }
+        }
+    }
+};
 
 
 class ConfigsForm extends React.Component {
@@ -71,62 +88,32 @@ ConfigsForm = reduxForm({
 })(ConfigsForm);
 
 
-let dataKey = 0;
-let configFiles = 0;
+/*const data = [{
+    key: 1,
+    xuHao: 1,
+    configName: 'AAA',
+    configContent: 'aaa',
+}, {
+    key: 2,
+    xuHao: 2,
+    configName: 'BBB',
+    configContent: 'bbb',
+}];*/
+
 
 class AddConfigsModal extends React.Component {
-    render() {
 
-        let service = this.props.service;
-        let configs = service ? service.configs : [];
+    _files = [];
+    count = 0;
 
-        return (
-            <div>
-                <div className="submit-btn" style={{textAlign:'right'}}>
-                    <Button type="primary" onClick={this._showModal}>添加配置文件</Button>
-                </div>
-                <ModalForm
-                    visible={this.state.visible}
-                    okModal={this._okModal}
-                    cancelModal={this._cancelModal}
-                />
-                <Table
-                    dataSource={configs}
-                    pagination={false}
-                >
-                    <Column
-                        title="序号"
-                        dataIndex="xuHao"
-                        key="xuHao"
-                    />
-                    <Column
-                        title="Config Name"
-                        dataIndex="configName"
-                        key="configName"
-                    />
-                    <Column
-                        title="Config Content"
-                        dataIndex="configContent"
-                        key="configContent"
-                    />
-                    <Column
-                        title="Action"
-                        key="action"
-                        render={(text, record) => (
-                            <span>
-                                <a href="javascript:;" onClick={this._delService}>删除</a>
-                            </span>
-                        )}
-                    />
-                </Table>
-            </div>
-        )
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            visible: false,
+            files: []
+        };
     }
-}
-
-class AddForm extends React.Component {
-
-    state = { visible: false };
 
     _showModal = () => {
         this.setState({
@@ -141,23 +128,97 @@ class AddForm extends React.Component {
     };
 
     _okModal = (values) => {
-        console.log(values);
+        let file = {}, count = ++this.count;
+
+        file.key = count;
+        file.id = count;
+        file.configName = values.configName;
+        file.configContent = values.configContent;
+        this._files.push(file);
+
+        configArray = this._files;
+
         this.setState({
             visible: false,
+            files: this._files
+        });
+        configFiles++;
+    };
+
+    _delService = (obj) => {
+        removeObjWithArr(this._files,obj);
+
+        configArray = this._files;
+
+        this.setState({
+            files: this._files
         });
     };
 
+    render() {
+
+        return (
+            <div>
+                <div className="submit-btn" style={{textAlign:'right'}}>
+                    <Button type="primary" onClick={this._showModal}>添加配置文件</Button>
+                </div>
+                <ConfigsForm
+                    visible={this.state.visible}
+                    okModal={this._okModal}
+                    cancelModal={this._cancelModal}
+                />
+                <Table
+                    dataSource={this.state.files}
+                    pagination={false}
+                >
+                    <Column
+                        title="序号"
+                        dataIndex="id"
+                        key="id"
+                    />
+                    <Column
+                        title="Config Name"
+                        dataIndex="configName"
+                        key="configName"
+                    />
+                    <Column
+                        title="Config Content"
+                        dataIndex="configContent"
+                        key="configContent"
+                    />
+                    <Column
+                        title="Action"
+                        key="action"
+                        render={(text, record) => {
+                            return (
+                                <span>
+                                <a href="javascript:;" onClick={() => this._delService(record)}>删除</a>
+                            </span>
+                            )
+                        }}
+                    />
+                </Table>
+            </div>
+        )
+    }
+}
+
+
+let listId = 0;
+class AddForm extends React.Component {
+
     _addService = (values) => {
         let service = {};
-        service.key = dataKey;
-        service.xuHao = service;
+        service.key = ++dataKey;
+        service.id = ++listId;
         service.service = values.service;
         service.environment = values.environment;
         service.comment= values.comment;
-        service.configFiles = 2;
-        dataKey++;
+        service.configFiles = configFiles;
+        service.configArray = configArray;
         this.props.onAddService(service);
         this.props.history.replace('/Service/List');
+        configFiles = 0;
     };
 
     render() {
