@@ -14,14 +14,14 @@ export const addService = (service) => ({
     service: service
 });
 
-export const removeService = (id) => ({
+export const removeService = (service) => ({
     type: REMOVE_SERVICE,
-    id: id,
+    service: service,
 });
 
-export const editService = (id) => ({
+export const editService = (service) => ({
     type: EDIT_SERVICE,
-    id: id,
+    service: service,
 });
 
 export const checkService = (id) => ({

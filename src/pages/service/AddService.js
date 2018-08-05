@@ -15,6 +15,8 @@ import {
 
 import './service.css';
 
+import {removeObjWithArr} from '../../common/GlobalUtil'
+
 
 const { Column } = Table;
 const { TextArea } = Input;
@@ -22,31 +24,6 @@ const { TextArea } = Input;
 let dataKey = 0;
 let configFiles = 0;
 let configArray = [];
-
-let removeObjWithArr = function (_arr,_obj) {
-    var length = _arr.length;
-    for(var i = 0; i < length; i++)
-    {
-        if(_arr[i] == _obj)
-        {
-            if(i == 0)
-            {
-                _arr.shift(); //删除并返回数组的第一个元素
-                return;
-            }
-            else if(i == length-1)
-            {
-                _arr.pop();  //删除并返回数组的最后一个元素
-                return;
-            }
-            else
-            {
-                _arr.splice(i,1); //删除下标为i的元素
-                return;
-            }
-        }
-    }
-};
 
 
 class ConfigsForm extends React.Component {
@@ -84,7 +61,7 @@ class ConfigsForm extends React.Component {
 }
 
 ConfigsForm = reduxForm({
-    form: 'configsForm'
+    form: 'addConfigsForm'
 })(ConfigsForm);
 
 

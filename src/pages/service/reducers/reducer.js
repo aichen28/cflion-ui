@@ -18,16 +18,21 @@ export default (state = [], action) => {
             ]
         }
         case REMOVE_SERVICE: {
-            return state.filter((service) => {
-                return service.id !== action.id
-            })
+            let index;
+            for (let k = 0; k < state.length; k++) {
+                if (state[k].service.id === action.service.id) {
+                    index = state.indexOf(state[k]);
+                }
+            }
+            state.splice(index, 1);
+            return state;
         }
         case EDIT_SERVICE: {
             return state.map((ele) => {
-                if (ele.id === action.id) {
+                if (ele.service.id === action.service.id) {
                     return {
                         ...ele,
-                        service: ele.service
+                        service: action.service
                     }
                 } else {
                     return ele;
@@ -35,8 +40,8 @@ export default (state = [], action) => {
             })
         }
         case CHECK_SERVICE: {
-            return state.filter((service) => {
-                return service.id === action.id
+            return state.filter((obj) => {
+                return obj.service.id === action.id
             })
         }
         default: {

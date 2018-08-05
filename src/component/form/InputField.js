@@ -27,15 +27,31 @@ export class TextAreaField extends React.Component {
 }
 
 class InputItem extends React.Component {
+
+    constructor() {
+        super(...arguments);
+    }
+
     render() {
-        const { input: { name, value, onChange }, meta, placeholder } = this.props;
+        const {
+            input: { name, value, onChange },
+            meta: { initial },
+            placeholder,
+            valueDes,
+            disabledDes,
+            style
+        } = this.props;
+
 
         return(
             <Input
                 name={name}
-                placeholder={placeholder}
+                defaultValue={initial || ''}
+                placeholder={valueDes ? valueDes : placeholder}
                 value={value}
                 onChange={onChange}
+                disabled={disabledDes || false}
+                style={[{...style}]}
             />
         )
     }
@@ -43,14 +59,21 @@ class InputItem extends React.Component {
 
 class TextAreaItem extends React.Component {
     render() {
-        const { input: {name, value, onChange}, meta, placeholder } = this.props;
+        const {
+            input: {name, value, onChange},
+            meta,
+            placeholder,
+            autosize,
+            valueDes
+        } = this.props;
 
         return (
             <TextArea
                 name={name}
-                placeholder={placeholder}
+                placeholder={valueDes ? valueDes : placeholder}
                 value={value}
                 onChange={onChange}
+                autosize={autosize}
             />
         )
     }
