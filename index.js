@@ -2,9 +2,9 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 
-import App from './App';
+import App from './src/App';
 
-import './common/GlobalStyle.css'
+import './src/common/GlobalStyle.css'
 
 
 const rootEl = document.getElementById("root");
